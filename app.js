@@ -64,6 +64,50 @@ $('#glance').innerHTML=DAYS.map((d,i)=>{
   else if(title.includes('Osaka')) icon='🍣';
   return `<a class="glance-card ${MOVE_DATES.has(d[1])?'move-day':''}" href="#day-${i}"><b>${esc(d[1])}</b><strong><span class="glance-emoji">${icon}</span>${esc(title)}</strong><small>${esc(d[2])}</small></a>`;
 }).join('');
+
+function tripDateFromLabel(label){
+  const m=String(label).match(/(\d{1,2})\s+OCT/i);
+  return m ? new Date(2026,9,Number(m[1]),12,0,0) : null;
+}
+function renderToday(){
+  const now=new Date();
+  const first=tripDateFromLabel(DAYS[0][1]);
+  const last=tripDateFromLabel(DAYS[DAYS.length-1][1]);
+  let idx=0,status='Upcoming';
+  if(now<first){ idx=0; status='Upcoming'; }
+  else if(now>last){ idx=DAYS.length-1; status='Trip complete'; }
+  else{
+    const key=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+    const exact=DAYS.findIndex(d=>{const x=tripDateFromLabel(d[1]);return x&&new Date(x.getFullYear(),x.getMonth(),x.getDate()).getTime()===key});
+    if(exact>=0){idx=exact;status='Today';}
+    else{
+      const next=DAYS.findIndex(d=>tripDateFromLabel(d[1])>now);
+      idx=next>=0?next:DAYS.length-1;status='Upcoming';
+    }
+  }
+  const d=DAYS[idx];
+  const icon=String(d[0]).includes('Hong Kong')?'🇭🇰':String(d[0]).includes('Tokyo')?'🌃':String(d[0]).includes('Fuji')?'🗻':String(d[0]).includes('Kyoto')?'🎎':String(d[0]).includes('Osaka')?'🍣':'';
+  $('#todayStatus').textContent=status;
+  $('#todayHeading').textContent=status==='Today'?'What’s on today':status==='Trip complete'?'Final trip day':'Coming up';
+  $('#todayContent').innerHTML=`<article class="today-itinerary ${MOVE_DATES.has(d[1])?'move-day':''}">
+    <div class="today-date">${esc(d[1])}</div>
+    <h3>${icon} ${esc(d[0])}</h3>
+    <p class="today-summary">${esc(d[2])}</p>
+    <div class="today-slots">
+      <div><span>AM</span><p>${esc(d[3])}</p></div>
+      <div><span>PM</span><p>${esc(d[4])}</p></div>
+      <div><span>EVE</span><p>${esc(d[5])}</p></div>
+    </div>
+    <button class="today-full" data-today-day="${idx}">View full day</button>
+  </article>`;
+  const btn=document.querySelector('[data-today-day]');
+  if(btn)btn.onclick=()=>{
+    document.querySelector('[data-view="trip"]').click();
+    setTimeout(()=>document.querySelector(`#day-${idx}`)?.scrollIntoView({behavior:'smooth',block:'start'}),80);
+  };
+}
+renderToday();
+
 let html='',last='';
 DAYS.forEach((d,i)=>{const[city,date,title,tldr,am,pm,eve,chips,note]=d;if(city!==last){html+=`<div class="city"><h2>${esc(city)}</h2><p>${city==='Tokyo'?'6–10 Oct · Hotel Groove Shinjuku':city==='Hong Kong'?'3–6 Oct · The Pottinger':city==='Mt Fuji'?'10–11 Oct · Shuhokaku Kogetsu':city==='Kyoto'?'11–14 Oct · Shizuru Kamogawa':city==='Osaka'?'14–17 Oct · Candeo Osaka Shinsaibashi':''}</p></div>`;last=city;}const chipHtml=chips.map(c=>`<span class="chip ${/BOOKED|Nothing/.test(c)?'booked':/BOOK|CHECK|OPTIONAL/.test(c)?'action':/ARRANGE|DAY BAG/.test(c)?'arrange':''}">${esc(c)}</span>`).join('');html+=`<details class="day" id="day-${i}"><summary><div class="date">${esc(date)}</div><h3>${esc(title)}</h3><div class="tldr">${esc(tldr)}</div></summary><div class="day-body"><div class="period"><b>AM</b><p>${esc(am)}</p></div><div class="period"><b>PM</b><p>${esc(pm)}</p></div><div class="period"><b>EVE</b><p>${esc(eve)}</p></div><div class="map-chips">${(DAY_MAPS[i]||[]).map(m=>`<a class="map-chip" href="${googleMapsUrl(m[1])}">📍 ${esc(m[0])}</a>`).join('')}</div><div class="chips">${chipHtml}</div><div class="context">${esc(note)}</div></div></details>`;});
 $('#days').innerHTML=html;

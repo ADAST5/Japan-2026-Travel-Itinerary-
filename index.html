@@ -19,14 +19,19 @@
 </header>
 <main>
   <nav class="tabs" aria-label="Trip navigation">
-    <button class="tab active" data-view="trip">Trip</button>
+    <button class="tab active" data-view="today">Today</button>
+    <button class="tab" data-view="trip">Trip</button>
     <button class="tab" data-view="hotels">Hotels</button>
     <button class="tab" data-view="bookings">Bookings</button>
     <button class="tab" data-view="food">Food</button>
     <button class="tab" data-view="travel">Travel</button>
     <button class="tab" data-view="weather">Weather</button>
   </nav>
-  <section id="trip" class="view active">
+  <section id="today" class="view active">
+    <div class="section-title"><h2 id="todayHeading">What’s on today</h2><span id="todayStatus"></span></div>
+    <div id="todayContent" class="today-content"></div>
+  </section>
+  <section id="trip" class="view">
     <div class="section-title"><h2>Trip at a glance</h2><span>Tap a day for detail</span></div>
     <div id="glance" class="glance"></div><div id="days" class="days"></div>
   </section>
