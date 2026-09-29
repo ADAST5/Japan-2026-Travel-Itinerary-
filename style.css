@@ -22,3 +22,5 @@
 
 .trip-title{white-space:nowrap}
 @media(max-width:520px){.hero .trip-title{font-size:clamp(27px,7.4vw,36px);letter-spacing:-1px}}
+
+.glance-emoji{display:inline-block;margin-right:7px;font-size:.95em}
