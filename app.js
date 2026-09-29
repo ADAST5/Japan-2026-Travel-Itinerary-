@@ -13,12 +13,31 @@ function googleMapsUrl(query){
   return `comgooglemaps://?q=${encodeURIComponent(query)}`;
 }
 
+
+const DAY_MAPS = [
+  [["The Pottinger","The Pottinger Hong Kong"],["Central","Central Hong Kong"]],
+  [["Man Mo Temple","Man Mo Temple Hong Kong"],["Victoria Peak","Victoria Peak Hong Kong"],["Avenue of Stars","Avenue of Stars Hong Kong"]],
+  [["Ngong Ping 360","Ngong Ping 360 Tung Chung"],["Big Buddha","Tian Tan Buddha Hong Kong"],["Temple Street","Temple Street Night Market Hong Kong"]],
+  [["Hotel Groove","HOTEL GROOVE SHINJUKU A PARKROYAL Hotel"],["Omoide Yokocho","Omoide Yokocho Tokyo"]],
+  [["Meiji Jingu","Meiji Jingu Tokyo"],["Nintendo TOKYO","Nintendo TOKYO Shibuya PARCO"],["Shibuya Sky","Shibuya Sky"]],
+  [["Senso-ji","Senso-ji Tokyo"],["Ueno Park","Ueno Park Tokyo"],["Akihabara","Akihabara Tokyo"]],
+  [["Tokyo Station","Tokyo Station"],["Ginza","Ginza Tokyo"],["teamLab","teamLab Borderless Azabudai Hills"]],
+  [["Chureito","Chureito Pagoda"],["Oishi Park","Oishi Park Fujikawaguchiko"],["Kogetsu","Shuhokaku Kogetsu"]],
+  [["Kawaguchiko Sta.","Kawaguchiko Station"],["Mishima Sta.","Mishima Station"],["Shizuru","Shizuru Kamogawa Kyoto"]],
+  [["Kiyomizu","Kiyomizu-dera Kyoto"],["Yasaka Pagoda","Hokan-ji Temple Yasaka Pagoda"],["Fushimi Inari","Fushimi Inari Taisha"]],
+  [["Arashiyama","Arashiyama Bamboo Forest"],["Kinkaku-ji","Kinkaku-ji Kyoto"],["Nishiki Market","Nishiki Market Kyoto"]],
+  [["Nijo Castle","Nijo Castle Kyoto"],["Candeo","Candeo Hotels Osaka Shinsaibashi"],["Dotonbori","Dotonbori Osaka"]],
+  [["Osaka Castle","Osaka Castle"],["Kuromon","Kuromon Ichiba Market"],["Shinsekai","Shinsekai Osaka"]],
+  [["Namba Yasaka","Namba Yasaka Jinja"],["Umeda Sky","Umeda Sky Building"],["Candeo","Candeo Hotels Osaka Shinsaibashi"]],
+  [["KIX","Kansai International Airport Terminal 1"]]
+];
+
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.view').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.view).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});});
 $('#glance').innerHTML=DAYS.map((d,i)=>`<a class="glance-card" href="#day-${i}"><b>${esc(d[1])}</b><strong>${esc(d[0])}</strong><small>${esc(d[2])}</small></a>`).join('');
 let html='',last='';
-DAYS.forEach((d,i)=>{const[city,date,title,tldr,am,pm,eve,chips,note]=d;if(city!==last){html+=`<div class="city"><h2>${esc(city)}</h2><p>${city==='Tokyo'?'6–10 Oct · Hotel Groove Shinjuku':city==='Hong Kong'?'3–6 Oct · The Pottinger':city==='Mt Fuji'?'10–11 Oct · Shuhokaku Kogetsu':city==='Kyoto'?'11–14 Oct · Shizuru Kamogawa':city==='Osaka'?'14–17 Oct · Candeo Osaka Shinsaibashi':''}</p></div>`;last=city;}const chipHtml=chips.map(c=>`<span class="chip ${/BOOKED|Nothing/.test(c)?'booked':/BOOK|CHECK|OPTIONAL/.test(c)?'action':/ARRANGE|DAY BAG/.test(c)?'arrange':''}">${esc(c)}</span>`).join('');html+=`<details class="day" id="day-${i}"><summary><div class="date">${esc(date)}</div><h3>${esc(title)}</h3><div class="tldr">${esc(tldr)}</div></summary><div class="day-body"><div class="period"><b>AM</b><p>${esc(am)}</p></div><div class="period"><b>PM</b><p>${esc(pm)}</p></div><div class="period"><b>EVE</b><p>${esc(eve)}</p></div><div class="chips">${chipHtml}</div><div class="context">${esc(note)}</div></div></details>`;});
+DAYS.forEach((d,i)=>{const[city,date,title,tldr,am,pm,eve,chips,note]=d;if(city!==last){html+=`<div class="city"><h2>${esc(city)}</h2><p>${city==='Tokyo'?'6–10 Oct · Hotel Groove Shinjuku':city==='Hong Kong'?'3–6 Oct · The Pottinger':city==='Mt Fuji'?'10–11 Oct · Shuhokaku Kogetsu':city==='Kyoto'?'11–14 Oct · Shizuru Kamogawa':city==='Osaka'?'14–17 Oct · Candeo Osaka Shinsaibashi':''}</p></div>`;last=city;}const chipHtml=chips.map(c=>`<span class="chip ${/BOOKED|Nothing/.test(c)?'booked':/BOOK|CHECK|OPTIONAL/.test(c)?'action':/ARRANGE|DAY BAG/.test(c)?'arrange':''}">${esc(c)}</span>`).join('');html+=`<details class="day" id="day-${i}"><summary><div class="date">${esc(date)}</div><h3>${esc(title)}</h3><div class="tldr">${esc(tldr)}</div></summary><div class="day-body"><div class="period"><b>AM</b><p>${esc(am)}</p></div><div class="period"><b>PM</b><p>${esc(pm)}</p></div><div class="period"><b>EVE</b><p>${esc(eve)}</p></div><div class="map-chips">${(DAY_MAPS[i]||[]).map(m=>`<a class="map-chip" href="${googleMapsUrl(m[1])}">📍 ${esc(m[0])}</a>`).join('')}</div><div class="chips">${chipHtml}</div><div class="context">${esc(note)}</div></div></details>`;});
 $('#days').innerHTML=html;
 $('#hotelList').innerHTML=HOTELS.map(h=>`<article class="hotel-card"><div class="hotel-head"><span class="hotel-flag">${h[0]}</span><div><span class="tag">${esc(h[1])} · ${esc(h[2])}</span><h3>${esc(h[3])}</h3><p class="hotel-area">${esc(h[4])}</p></div></div><div class="hotel-detail"><b>📍 Address</b><span>${esc(h[5])}</span></div><div class="hotel-detail"><b>🚉 Station</b><span>${esc(h[6])}</span></div><p class="hotel-note">${esc(h[7])}</p><a class="hotel-map" href="${googleMapsUrl(h[8])}">Open in Google Maps ↗</a></article>`).join('');
 $('#bookingList').innerHTML=BOOKINGS.map(b=>`<div class="item"><div class="item-top"><div><span class="tag">${esc(b[1])}</span><h3>${esc(b[0])}</h3><p>${esc(b[3])}</p></div><span class="status ${b[2].toLowerCase()}">${esc(b[2])}</span></div></div>`).join('');
