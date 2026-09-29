@@ -2,6 +2,24 @@ const DAYS = [["Hong Kong","SAT 3 OCT","Arrival + easy Central","Land, get to Th
 const BOOKINGS=[["Peak Tram / Victoria Peak","4 Oct","BOOK","Sunset / night timing"],["Shibuya Sky","7 Oct","BOOK","Pre-sunset entry ideal"],["teamLab Borderless","9 Oct","BOOK","Afternoon timed entry"],["Tokyo → Kyoto luggage","9–10 Oct","ARRANGE","Cases skip Fuji"],["Fuji Excursion","10 Oct","BOOKED","08:30 Shinjuku → 10:26 Kawaguchiko"],["Kawaguchiko → Mishima bus","11 Oct","BOOKED","09:20 → 10:50"],["Hikari 709","11 Oct","BOOKED","11:46 Mishima → 13:37 Kyoto"],["Kyoto → Osaka luggage","13–14 Oct","ARRANGE","Cases to Candeo"],["Nijo Castle / Ninomaru","14 Oct","CHECK","Timed entry if useful"],["Umeda Sky Building","16 Oct","OPTIONAL","Protect sunset slot if desired"],["Kyoto → Osaka train","14 Oct","FLEX","Deliberately wing it"]];
 const RESTAURANTS=[["Hong Kong","Central","Yat Lok","Roast goose / Cantonese","Excellent casual option near the Central itinerary."],["Hong Kong","Sheung Wan","Yardbird","Yakitori","Lively dinner option; better as a deliberate evening meal than a quick stop."],["Tokyo","Shinjuku","Fuunji","Tsukemen","Very handy from Hotel Groove for a ramen/tsukemen hit."],["Tokyo","Asakusa","Asakusa Imahan","Sukiyaki","Classic sit-down option that fits the Asakusa day."],["Tokyo","Shibuya","Uobei Shibuya Dogenzaka","Sushi","Fast, fun conveyor-style sushi near the Shibuya route."],["Tokyo","Ginza","Ginza Kagari","Chicken paitan ramen","Useful polished-but-casual lunch option during Ginza."],["Kyoto","Gion","Gion Tanto","Okonomiyaki","Relaxed dinner option after Gion sightseeing."],["Kyoto","Pontocho","Kappa Sushi Pontocho","Sushi / Japanese","Convenient river-area option for an easy evening."],["Kyoto","Kawaramachi","Men-ya Inoichi","Ramen","Strong central Kyoto ramen option; useful around shopping."],["Osaka","Namba / Dotonbori","Ajinoya Honten","Okonomiyaki","Very on-theme first Osaka dinner around Dotonbori."],["Osaka","Shinsekai","Yaekatsu","Kushikatsu","Fits the Shinsekai evening perfectly."],["Osaka","Namba","Matsusakagyu Yakiniku M","Yakiniku","More substantial final-night meat dinner option."]];
 const TRAVEL=[["Flights","2–3 Oct","CX254 LHR T3 22:15 → HKG T1 18:00"],["Flight","6 Oct","UO646 HKG 13:00 → NRT 18:25"],["Fuji train","10 Oct","Fuji Excursion: Shinjuku 08:30 → Kawaguchiko 10:26 · BOOKED"],["Fuji bus","11 Oct","Kawaguchiko 09:20 → Mishima 10:50 · BOOKED"],["Shinkansen","11 Oct","Hikari 709: Mishima 11:46 → Kyoto 13:37 · BOOKED"],["Luggage","9–10 Oct","Hotel Groove → Shizuru Kamogawa. Take only an overnight/day bag to Fuji."],["Luggage","13–14 Oct","Shizuru Kamogawa → Candeo Osaka Shinsaibashi. Do Nijo with a day bag."],["Return","17 Oct","CX597 KIX 09:05 → HKG 12:15 · CX253 HKG 13:25 → LHR T3 20:35"]];
+const AIRPORTS=[
+["🇬🇧","London Heathrow","LHR · Terminal 3","2 Oct · CX254 · Cathay Pacific","Depart 22:15 → Hong Kong","Head to Terminal 3 at Heathrow."],
+["🇭🇰","Hong Kong International","HKG · Terminal 1","3 Oct · CX254 · Cathay Pacific","Arrive 18:00 from London","Cathay arrival into Hong Kong."],
+["🇭🇰","Hong Kong International","HKG · Terminal 2 check-in","6 Oct · UO646 · HK Express","Depart 13:00 → Tokyo Narita","HK Express check-in and bag drop: T2, Aisle U. After security and immigration, take the Automated People Mover to the T1 boarding-gate area."],
+["🇯🇵","Tokyo Narita","NRT · Terminal 2","6 Oct · UO646 · HK Express","Arrive 18:25 from Hong Kong","HK Express arrival terminal for the Tokyo leg."],
+["🇯🇵","Kansai International","KIX · Terminal 1","17 Oct · CX597 · Cathay Pacific","Depart 09:05 → Hong Kong","Cathay departure terminal. Early start from Shinsaibashi."],
+["🇭🇰","Hong Kong International","HKG · Terminal 1","17 Oct · CX597 → CX253 · Cathay Pacific","12:15 arrival · 13:25 onward","1h10 connection. Follow Transfer signs for the Cathay connection."],
+["🇬🇧","London Heathrow","LHR · Terminal 3","17 Oct · CX253 · Cathay Pacific","Arrive 20:35","Home."]
+];
+
+const WEATHER_STOPS=[
+["🇭🇰","Hong Kong","2026-10-03","2026-10-06",22.3193,114.1694],
+["🇯🇵","Tokyo","2026-10-06","2026-10-10",35.6762,139.6503],
+["🗻","Kawaguchiko","2026-10-10","2026-10-11",35.5010,138.7550],
+["🇯🇵","Kyoto","2026-10-11","2026-10-14",35.0116,135.7681],
+["🇯🇵","Osaka","2026-10-14","2026-10-17",34.6937,135.5023]
+];
+
 const HOTELS=[
 ["🇭🇰","Hong Kong","3–6 Oct","The Pottinger Hong Kong","Central","74 Queen's Road Central / entrance via Stanley Street, Central, Hong Kong","Central MTR area","Excellent base for Central, SoHo and Sheung Wan.","The Pottinger Hong Kong"],
 ["🇯🇵","Tokyo","6–10 Oct","HOTEL GROOVE SHINJUKU, A PARKROYAL Hotel","Kabukicho · Shinjuku","1-29-1 Kabukicho, Shinjuku-ku, Tokyo 160-0021","Seibu-Shinjuku 1 min · JR Shinjuku 7 min","Inside Tokyu Kabukicho Tower — ideal for the first-night Shinjuku wander.","HOTEL GROOVE SHINJUKU A PARKROYAL Hotel"],
@@ -44,6 +62,33 @@ $('#bookingList').innerHTML=BOOKINGS.map(b=>`<div class="item"><div class="item-
 const cities=['All',...new Set(RESTAURANTS.map(r=>r[0]))];$('#foodFilters').innerHTML=cities.map((c,i)=>`<button class="filter ${i===0?'active':''}" data-city="${esc(c)}">${esc(c)}</button>`).join('');
 function renderFood(city='All'){$('#restaurantList').innerHTML=RESTAURANTS.filter(r=>city==='All'||r[0]===city).map(r=>`<div class="item"><span class="tag">${esc(r[0])} · ${esc(r[1])}</span><h3>${esc(r[2])}</h3><p><b>${esc(r[3])}</b> — ${esc(r[4])}</p><a class="maplink" href="${googleMapsUrl(r[2]+' '+r[1]+' '+r[0])}">Open in Maps ↗</a></div>`).join('');}renderFood();
 document.querySelectorAll('.filter').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderFood(b.dataset.city)});
+$('#airportList').innerHTML=AIRPORTS.map(a=>`<article class="airport-card"><div class="airport-head"><span class="airport-flag">${a[0]}</span><div><span class="tag">${esc(a[3])}</span><h3>${esc(a[1])}</h3><div class="terminal">${esc(a[2])}</div></div></div><p class="airport-route">${esc(a[4])}</p><p class="airport-note">${esc(a[5])}</p></article>`).join('');
 $('#travelList').innerHTML=TRAVEL.map(t=>`<div class="item"><span class="tag">${esc(t[0])} · ${esc(t[1])}</span><h3>${esc(t[2])}</h3></div>`).join('');
+
+const weatherIcon=code=>code===0?'☀️':code<=2?'🌤️':code===3?'☁️':code<=48?'🌫️':code<=57?'🌦️':code<=67?'🌧️':code<=77?'🌨️':code<=82?'🌦️':code<=86?'🌨️':'⛈️';
+const weatherText=code=>code===0?'Clear':code<=2?'Partly cloudy':code===3?'Cloudy':code<=48?'Foggy':code<=57?'Drizzle':code<=67?'Rain':code<=77?'Snow':code<=82?'Showers':code<=86?'Snow showers':'Thunderstorms';
+const shortDate=s=>new Date(s+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+
+async function loadWeather(){
+  const list=$('#weatherList'),updated=$('#weatherUpdated');
+  if(!list)return;
+  list.innerHTML='<div class="weather-loading">Loading live forecasts…</div>';
+  try{
+    const cards=await Promise.all(WEATHER_STOPS.map(async w=>{
+      const [flag,city,start,end,lat,lon]=w;
+      const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=16`;
+      const data=await fetch(url).then(r=>{if(!r.ok)throw new Error('Weather request failed');return r.json()});
+      const days=(data.daily?.time||[]).map((date,i)=>({date,code:data.daily.weather_code[i],max:data.daily.temperature_2m_max[i],min:data.daily.temperature_2m_min[i],rain:data.daily.precipitation_probability_max[i]})).filter(d=>d.date>=start&&d.date<=end);
+      if(!days.length)return `<article class="weather-card"><div class="weather-city"><span>${flag}</span><div><h3>${esc(city)}</h3><small>${shortDate(start)} – ${shortDate(end)}</small></div></div><div class="forecast-soon">Forecast available soon</div><p>Trip dates are not yet inside the live forecast window. This card will fill itself automatically when they are.</p></article>`;
+      return `<article class="weather-card"><div class="weather-city"><span>${flag}</span><div><h3>${esc(city)}</h3><small>${shortDate(start)} – ${shortDate(end)}</small></div></div><div class="weather-days">${days.map(d=>`<div class="weather-day"><b>${shortDate(d.date)}</b><span class="weather-icon">${weatherIcon(d.code)}</span><strong>${Math.round(d.max)}°</strong><small>${Math.round(d.min)}° low</small><small>💧 ${d.rain??0}%</small><small>${weatherText(d.code)}</small></div>`).join('')}</div></article>`;
+    }));
+    list.innerHTML=cards.join('');
+    updated.textContent='Live forecast · updated '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  }catch(e){
+    list.innerHTML='<div class="weather-error"><b>Weather couldn’t load.</b><span>Check the connection and reopen the page — the rest of the trip app still works offline.</span></div>';
+    updated.textContent='';
+  }
+}
+loadWeather();
 const now=new Date(),tripStart=new Date('2026-10-03T00:00:00'),tripEnd=new Date('2026-10-17T23:59:59');let today=`<strong>TRIP STATUS</strong><span>${now<tripStart?'Coming up soon':now>tripEnd?'Trip complete':'Open the day below for today’s plan'}</span>`;if(now>=tripStart&&now<=tripEnd){const day=Math.floor((new Date(now.getFullYear(),now.getMonth(),now.getDate())-tripStart)/86400000),d=DAYS[Math.max(0,Math.min(day,DAYS.length-1))];today=`<strong>TODAY · ${esc(d[1])}</strong><span>${esc(d[2])} — ${esc(d[3])}</span>`;}$('#todayCard').innerHTML=today;
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./service-worker.js');

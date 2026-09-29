@@ -25,6 +25,7 @@
     <button class="tab" data-view="bookings">Bookings</button>
     <button class="tab" data-view="food">Food</button>
     <button class="tab" data-view="travel">Travel</button>
+    <button class="tab" data-view="weather">Weather</button>
   </nav>
   <section id="trip" class="view active">
     <div class="section-title"><h2>Trip at a glance</h2><span>Tap a day for detail</span></div>
@@ -36,7 +37,8 @@
   </section>
   <section id="bookings" class="view"><div class="section-title"><h2>Booking dashboard</h2><span>Colour-coded actions</span></div><div id="bookingList" class="stack"></div></section>
   <section id="food" class="view"><div class="section-title"><h2>Notable restaurants</h2><span>Quick reference by city + neighbourhood</span></div><div id="foodFilters" class="filters"></div><div id="restaurantList" class="stack"></div></section>
-  <section id="travel" class="view"><div class="section-title"><h2>Travel + luggage</h2><span>The stuff we don't want to forget</span></div><div id="travelList" class="stack"></div></section>
+  <section id="travel" class="view"><div class="section-title"><h2>Travel + luggage</h2><span>Flights, terminals + bags</span></div><div id="airportList" class="airport-grid"></div><div id="travelList" class="stack travel-stack"></div></section>
+  <section id="weather" class="view"><div class="section-title"><h2>Weather</h2><span>Live forecast for our actual dates</span></div><div id="weatherUpdated" class="weather-updated"></div><div id="weatherList" class="weather-grid"></div><p class="weather-credit">Forecast data: Open-Meteo · refreshes when this page opens.</p></section>
 </main>
 <footer><p>Keep the DOCX/PDF as the backup. This web version contains no booking references, passport data or contact details.</p></footer>
 <script src="./app.js"></script>
