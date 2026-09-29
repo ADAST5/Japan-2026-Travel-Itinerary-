@@ -7,3 +7,10 @@
 .weather-source{display:block;text-align:center;margin-top:12px;padding:9px 10px;border-radius:10px;background:#eef5fa;color:var(--blue);text-decoration:none;font-size:12px;font-weight:900;border:1px solid #d8e8f2}
 
 .transport-filters{display:flex;gap:7px;margin-bottom:11px;overflow:auto}.transport-filter{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:850;color:var(--muted);white-space:nowrap}.transport-filter.active{background:var(--navy);border-color:var(--navy);color:#fff}.transport-timeline{display:grid;gap:10px}.transport-card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px;box-shadow:var(--shadow)}.transport-top{display:flex;gap:10px;align-items:flex-start}.transport-icon{font-size:23px;line-height:1}.transport-card h3{margin:2px 0 0;color:var(--navy);font-size:17px}.transport-times{display:grid;grid-template-columns:1fr 22px 1fr;align-items:center;margin-top:13px;padding:10px 0;border-top:1px solid #edf0f2;border-bottom:1px solid #edf0f2}.transport-times>span{text-align:center;color:var(--muted)}.transport-times>div:last-child{text-align:right}.transport-times b{display:block;font-size:17px;color:var(--navy)}.transport-times small{display:block;color:var(--muted);font-size:10.5px;margin-top:2px}.transport-service{display:inline-block;margin-top:10px;border-radius:8px;padding:5px 8px;background:var(--greenbg);color:var(--green);font-size:11px;font-weight:900}.transport-card p{margin:8px 0 0;color:var(--muted);font-size:12.5px}.travel-subhead{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:4px 2px 9px}.travel-subhead h3{margin:0;color:var(--navy);font-size:17px}.travel-subhead span{font-size:11px;color:var(--muted);text-align:right}.luggage-item p b{color:var(--ink)}.travel-stack{margin-top:22px}
+
+/* Transfer days in Trip at a glance */
+.glance-card.move-day,.glance-item.move-day,.glance>*.move-day{
+  background:#fff6e8;
+  border-color:#e8c98f;
+  box-shadow:0 3px 12px rgba(168,102,15,.08);
+}

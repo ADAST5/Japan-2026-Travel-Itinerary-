@@ -13,11 +13,11 @@ const AIRPORTS=[
 ];
 
 const WEATHER_STOPS=[
-["🇭🇰","Hong Kong","2026-10-03","2026-10-06",22.3193,114.1694,"https://open-meteo.com/en/docs?latitude=22.3193&longitude=114.1694"],
-["🇯🇵","Tokyo","2026-10-06","2026-10-10",35.6762,139.6503,"https://open-meteo.com/en/docs?latitude=35.6762&longitude=139.6503"],
-["🗻","Kawaguchiko","2026-10-10","2026-10-11",35.5010,138.7550,"https://open-meteo.com/en/docs?latitude=35.5010&longitude=138.7550"],
-["🇯🇵","Kyoto","2026-10-11","2026-10-14",35.0116,135.7681,"https://open-meteo.com/en/docs?latitude=35.0116&longitude=135.7681"],
-["🇯🇵","Osaka","2026-10-14","2026-10-17",34.6937,135.5023,"https://open-meteo.com/en/docs?latitude=34.6937&longitude=135.5023"]
+["🇭🇰","Hong Kong","2026-10-03","2026-10-06",22.3193,114.1694,"https://weather.com/en-GB/cn/city/hong-kong/tenday"],
+["🇯🇵","Tokyo","2026-10-06","2026-10-10",35.6762,139.6503,"https://weather.com/jp/tokyo-prefecture/city/tokyo/tenday"],
+["🗻","Kawaguchiko","2026-10-10","2026-10-11",35.5010,138.7550,"https://weather.com/jp/yamanashi/minamitsuru-district/fujikawaguchiko-machi/postcode/401-0332/tenday"],
+["🇯🇵","Kyoto","2026-10-11","2026-10-14",35.0116,135.7681,"https://weather.com/en-BS/jp/kyoto/city/kyoto/today"],
+["🇯🇵","Osaka","2026-10-14","2026-10-17",34.6937,135.5023,"https://weather.com/en-TO/weather/monthly/l/Osaka%2BOsaka%2BJapan?placeId=d7b2d83642a80b23de110fad7c4c62517378f3f0f57bd8379415ca3d43a5c4a8"]
 ];
 
 const HOTELS=[
@@ -53,7 +53,7 @@ const DAY_MAPS = [
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.view').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.view).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});});
-$('#glance').innerHTML=DAYS.map((d,i)=>`<a class="glance-card" href="#day-${i}"><b>${esc(d[1])}</b><strong>${esc(d[0])}</strong><small>${esc(d[2])}</small></a>`).join('');
+$('#glance').innerHTML=DAYS.map((d,i)=>`<a class="glance-card ${MOVE_DATES.has(d[0])?'move-day':''}" href="#day-${i}"><b>${esc(d[1])}</b><strong>${esc(d[0])}</strong><small>${esc(d[2])}</small></a>`).join('');
 let html='',last='';
 DAYS.forEach((d,i)=>{const[city,date,title,tldr,am,pm,eve,chips,note]=d;if(city!==last){html+=`<div class="city"><h2>${esc(city)}</h2><p>${city==='Tokyo'?'6–10 Oct · Hotel Groove Shinjuku':city==='Hong Kong'?'3–6 Oct · The Pottinger':city==='Mt Fuji'?'10–11 Oct · Shuhokaku Kogetsu':city==='Kyoto'?'11–14 Oct · Shizuru Kamogawa':city==='Osaka'?'14–17 Oct · Candeo Osaka Shinsaibashi':''}</p></div>`;last=city;}const chipHtml=chips.map(c=>`<span class="chip ${/BOOKED|Nothing/.test(c)?'booked':/BOOK|CHECK|OPTIONAL/.test(c)?'action':/ARRANGE|DAY BAG/.test(c)?'arrange':''}">${esc(c)}</span>`).join('');html+=`<details class="day" id="day-${i}"><summary><div class="date">${esc(date)}</div><h3>${esc(title)}</h3><div class="tldr">${esc(tldr)}</div></summary><div class="day-body"><div class="period"><b>AM</b><p>${esc(am)}</p></div><div class="period"><b>PM</b><p>${esc(pm)}</p></div><div class="period"><b>EVE</b><p>${esc(eve)}</p></div><div class="map-chips">${(DAY_MAPS[i]||[]).map(m=>`<a class="map-chip" href="${googleMapsUrl(m[1])}">📍 ${esc(m[0])}</a>`).join('')}</div><div class="chips">${chipHtml}</div><div class="context">${esc(note)}</div></div></details>`;});
 $('#days').innerHTML=html;
@@ -82,7 +82,11 @@ function renderTransport(filter='all'){
     <button class="transport-filter ${filter==='all'?'active':''}" data-transport="all">All</button>
     <button class="transport-filter ${filter==='flight'?'active':''}" data-transport="flight">✈️ Flights</button>
     <button class="transport-filter ${filter==='rail'?'active':''}" data-transport="rail">🚆 Rail + Bus</button>
-  </div><div class="transport-timeline">${rows.map(t=>`<article class="transport-card">
+    <button class="transport-filter ${filter==='luggage'?'active':''}" data-transport="luggage">🧳 Luggage</button>
+  </div><div class="transport-timeline">${filter==='luggage' ? LUGGAGE.map(l=>`<article class="transport-card luggage-card">
+    <div class="transport-top"><span class="transport-icon">🧳</span><div><span class="tag">${esc(l[0])} · Luggage forwarding</span><h3>${esc(l[1])}</h3></div></div>
+    <div class="transport-service">${esc(l[2])}</div><p>${esc(l[3])}</p>
+  </article>`).join('') : rows.map(t=>`<article class="transport-card">
     <div class="transport-top"><span class="transport-icon">${t[2]}</span><div><span class="tag">${esc(t[1])} · ${esc(t[3])}</span><h3>${esc(t[4])} → ${esc(t[5])}</h3></div></div>
     <div class="transport-times"><div><b>${esc(t[6])}</b><small>${esc(t[9]||t[4])}</small></div><span>→</span><div><b>${esc(t[7])}</b><small>${esc(t[10]||t[5])}</small></div></div>
     <div class="transport-service">${esc(t[8])}</div>
@@ -92,7 +96,7 @@ function renderTransport(filter='all'){
 }
 renderTransport();
 
-$('#travelList').innerHTML=`<div class="travel-subhead"><h3>🧳 Luggage forwarding</h3><span>Keep Fuji + transfer days light</span></div>${LUGGAGE.map(l=>`<div class="item luggage-item"><span class="tag">${esc(l[0])}</span><h3>${esc(l[1])}</h3><p><b>${esc(l[2])}</b><br>${esc(l[3])}</p></div>`).join('')}`;
+$('#travelList').innerHTML='';
 
 const weatherIcon=code=>code===0?'☀️':code<=2?'🌤️':code===3?'☁️':code<=48?'🌫️':code<=57?'🌦️':code<=67?'🌧️':code<=77?'🌨️':code<=82?'🌦️':code<=86?'🌨️':'⛈️';
 const weatherText=code=>code===0?'Clear':code<=2?'Partly cloudy':code===3?'Cloudy':code<=48?'Foggy':code<=57?'Drizzle':code<=67?'Rain':code<=77?'Snow':code<=82?'Showers':code<=86?'Snow showers':'Thunderstorms';
@@ -108,8 +112,8 @@ async function loadWeather(){
       const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=16`;
       const data=await fetch(url).then(r=>{if(!r.ok)throw new Error('Weather request failed');return r.json()});
       const days=(data.daily?.time||[]).map((date,i)=>({date,code:data.daily.weather_code[i],max:data.daily.temperature_2m_max[i],min:data.daily.temperature_2m_min[i],rain:data.daily.precipitation_probability_max[i]})).filter(d=>d.date>=start&&d.date<=end);
-      if(!days.length)return `<article class="weather-card"><div class="weather-city"><span>${flag}</span><div><h3>${esc(city)}</h3><small>${shortDate(start)} – ${shortDate(end)}</small></div></div><div class="forecast-soon">Forecast available soon</div><p>Trip dates are not yet inside the live forecast window. This card will fill itself automatically when they are.</p><a class="weather-source" href="${sourceUrl}" target="_blank" rel="noopener">Open detailed forecast ↗</a></article>`;
-      return `<article class="weather-card"><div class="weather-city"><span>${flag}</span><div><h3>${esc(city)}</h3><small>${shortDate(start)} – ${shortDate(end)}</small></div></div><div class="weather-days">${days.map(d=>`<div class="weather-day"><b>${shortDate(d.date)}</b><span class="weather-icon">${weatherIcon(d.code)}</span><strong>${Math.round(d.max)}°</strong><small>${Math.round(d.min)}° low</small><small>💧 ${d.rain??0}%</small><small>${weatherText(d.code)}</small></div>`).join('')}</div><a class="weather-source" href="${sourceUrl}" target="_blank" rel="noopener">Open detailed forecast ↗</a></article>`;
+      if(!days.length)return `<article class="weather-card"><div class="weather-city"><span>${flag}</span><div><h3>${esc(city)}</h3><small>${shortDate(start)} – ${shortDate(end)}</small></div></div><div class="forecast-soon">Forecast available soon</div><p>Trip dates are not yet inside the live forecast window. This card will fill itself automatically when they are.</p><a class="weather-source" href="${sourceUrl}" target="_blank" rel="noopener">Detailed forecast · Weather.com ↗</a></article>`;
+      return `<article class="weather-card"><div class="weather-city"><span>${flag}</span><div><h3>${esc(city)}</h3><small>${shortDate(start)} – ${shortDate(end)}</small></div></div><div class="weather-days">${days.map(d=>`<div class="weather-day"><b>${shortDate(d.date)}</b><span class="weather-icon">${weatherIcon(d.code)}</span><strong>${Math.round(d.max)}°</strong><small>${Math.round(d.min)}° low</small><small>💧 ${d.rain??0}%</small><small>${weatherText(d.code)}</small></div>`).join('')}</div><a class="weather-source" href="${sourceUrl}" target="_blank" rel="noopener">Detailed forecast · Weather.com ↗</a></article>`;
     }));
     list.innerHTML=cards.join('');
     updated.textContent='Live forecast · updated '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
@@ -119,5 +123,6 @@ async function loadWeather(){
   }
 }
 loadWeather();
-const now=new Date(),tripStart=new Date('2026-10-03T00:00:00'),tripEnd=new Date('2026-10-17T23:59:59');let today=`<strong>TRIP STATUS</strong><span>${now<tripStart?'Coming up soon':now>tripEnd?'Trip complete':'Open the day below for today’s plan'}</span>`;if(now>=tripStart&&now<=tripEnd){const day=Math.floor((new Date(now.getFullYear(),now.getMonth(),now.getDate())-tripStart)/86400000),d=DAYS[Math.max(0,Math.min(day,DAYS.length-1))];today=`<strong>TODAY · ${esc(d[1])}</strong><span>${esc(d[2])} — ${esc(d[3])}</span>`;}$('#todayCard').innerHTML=today;
-if('serviceWorker' in navigator)navigator.serviceWorker.register('./service-worker.js');
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./service-worker.js')const MOVE_DATES=new Set(['6 Oct','10 Oct','11 Oct','14 Oct','17 Oct']);
+
+;
