@@ -25,6 +25,7 @@
     <button class="tab" data-view="bookings">Bookings</button>
     <button class="tab" data-view="food">Food</button>
     <button class="tab" data-view="travel">Travel</button>
+    <button class="tab" data-view="money">Money</button>
     <button class="tab" data-view="weather">Weather</button>
   </nav>
   <section id="today" class="view active">
@@ -42,6 +43,16 @@
   <section id="bookings" class="view"><div class="section-title"><h2>Booking dashboard</h2><span>Colour-coded actions</span></div><div id="bookingList" class="stack"></div></section>
   <section id="food" class="view"><div class="section-title"><h2>Notable restaurants</h2><span>Quick reference by city + neighbourhood</span></div><div id="foodFilters" class="filters"></div><div id="restaurantList" class="stack"></div></section>
   <section id="travel" class="view"><div class="section-title"><h2>Travel + luggage</h2><span>Flights, terminals + bags</span></div><div id="airportList" class="airport-grid"></div><div id="travelList" class="stack travel-stack"></div></section>
+  <section id="money" class="view">
+    <div class="section-title"><h2>Money</h2><span>Live GBP ↔ JPY / HKD converter</span></div>
+    <div id="moneyStatus" class="money-status">Loading latest exchange rates…</div>
+    <div class="money-grid">
+      <article class="money-card"><div class="money-head"><span>🇯🇵</span><div><h3>Japanese yen</h3><small id="jpyRate">—</small></div></div><div class="converter"><label>JPY ¥<input id="jpyInput" inputmode="decimal" placeholder="5000"></label><div class="equals">=</div><div id="jpyResult" class="money-result">£—</div></div><div id="jpyQuick" class="money-quick"></div></article>
+      <article class="money-card"><div class="money-head"><span>🇭🇰</span><div><h3>Hong Kong dollars</h3><small id="hkdRate">—</small></div></div><div class="converter"><label>HKD $<input id="hkdInput" inputmode="decimal" placeholder="500"></label><div class="equals">=</div><div id="hkdResult" class="money-result">£—</div></div><div id="hkdQuick" class="money-quick"></div></article>
+      <article class="money-card gbp-card"><div class="money-head"><span>🇬🇧</span><div><h3>Pounds to local currency</h3><small>Useful for budgets before you spend</small></div></div><div class="converter gbp-converter"><label>GBP £<input id="gbpInput" inputmode="decimal" placeholder="50"></label><div id="gbpResults" class="gbp-results"><b>¥—</b><b>HK$—</b></div></div></article>
+    </div>
+    <p class="money-note">Reference rates only. Your card, bank or cash exchange rate may differ.</p>
+  </section>
   <section id="weather" class="view"><div class="section-title"><h2>Weather</h2><span>Live forecast for our actual dates</span></div><div id="weatherUpdated" class="weather-updated"></div><div id="weatherList" class="weather-grid"></div><p class="weather-credit">Forecast data: Open-Meteo · refreshes when this page opens.</p></section>
 </main>
 <footer><p>Keep the DOCX/PDF as the backup. This web version contains no booking references, passport data or contact details.</p></footer>
