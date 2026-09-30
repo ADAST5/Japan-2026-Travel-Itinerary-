@@ -201,7 +201,7 @@ function renderMoney(){
 }
 async function loadMoney(){
   try{
-    const data=await fetch('https://api.frankfurter.app/latest?from=GBP&to=JPY,HKD').then(r=>{if(!r.ok)throw new Error('FX request failed');return r.json()});
+    const data=await fetch('https://api.frankfurter.dev/v1/latest?base=GBP&symbols=JPY,HKD').then(r=>{if(!r.ok)throw new Error('FX request failed');return r.json()});
     FX={JPY:data.rates.JPY,HKD:data.rates.HKD,date:data.date};localStorage.setItem(FX_KEY,JSON.stringify(FX));renderMoney();
   }catch(e){
     try{const saved=JSON.parse(localStorage.getItem(FX_KEY)||'null');if(saved?.JPY&&saved?.HKD){FX=saved;renderMoney();$('#moneyStatus').textContent=`Offline · last saved reference rates from ${FX.date}`;return;}}catch(_){}
