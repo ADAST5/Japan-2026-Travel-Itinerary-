@@ -94,9 +94,9 @@ function renderToday(){
     <h3>${icon} ${esc(d[0])}</h3>
     <p class="today-summary">${esc(d[2])}</p>
     <div class="today-slots">
-      <div><span>AM</span><p>${esc(d[3])}</p></div>
-      <div><span>PM</span><p>${esc(d[4])}</p></div>
-      <div><span>EVE</span><p>${esc(d[5])}</p></div>
+      <div><span>AM</span><p>${esc(d[4])}</p></div>
+      <div><span>PM</span><p>${esc(d[5])}</p></div>
+      <div><span>EVE</span><p>${esc(d[6])}</p></div>
     </div>
     <button class="today-full" data-today-day="${idx}">View full day</button>
   </article>`;
